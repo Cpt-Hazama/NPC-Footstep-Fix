@@ -1,4 +1,4 @@
-hook.Add("EntityEmitSound","NPC_HalfLife2_FootstepFix",function(soundData) -- Mmm, how bizzare that such a simple thing can't be fixed by the GMod devs. Pathetic. When they "fixed" it as they said, all they did was make them play the citizen footstep sounds...How is that a fucking fix??
+hook.Add("EntityEmitSound","NPC_HalfLife2_FootstepFix",function(soundData)
 	local ent = soundData.Entity
 	local snd = soundData.SoundName
 	local level = soundData.SoundLevel
@@ -6,6 +6,32 @@ hook.Add("EntityEmitSound","NPC_HalfLife2_FootstepFix",function(soundData) -- Mm
 	local pitch = soundData.Pitch
 	if ent:IsNPC() then
 		local class = ent:GetClass()
+		if class == "npc_citizen" then
+			if string.find(snd,"/footsteps/") then
+				-- local dirt = string.find(snd,"dirt")
+				-- local grass = string.find(snd,"grass")
+				-- local gravel = string.find(snd,"gravel")
+				-- local mud = string.find(snd,"mud")
+				-- local snow = string.find(snd,"snow")
+				-- local sand = string.find(snd,"sand")
+				-- local makeVeryStrangeSound = (dirt or grass or gravel or mud or snow or sand)
+				local tbl = {
+					"npc/footsteps/hardboot_generic1.wav",
+					"npc/footsteps/hardboot_generic2.wav",
+					"npc/footsteps/hardboot_generic3.wav",
+					"npc/footsteps/hardboot_generic4.wav",
+					"npc/footsteps/hardboot_generic5.wav",
+					"npc/footsteps/hardboot_generic6.wav",
+					"npc/footsteps/hardboot_generic8.wav",
+				}
+				-- if makeVeryStrangeSound then
+					-- table.insert(tbl,"npc/footsteps/softshoe_generic6.wav")
+				-- end
+				local newSnd = tbl[math.random(1,#tbl)]
+				sound.Play(newSnd,ent:GetPos(),level,pitch,vol)
+				return false
+			end
+		end
 		if class == "npc_combine_s" then
 			if string.find(snd,"/footsteps/") then
 				sound.Play("npc/combine_soldier/gear" .. math.random(1,6) .. ".wav",ent:GetPos(),level,pitch,vol)
